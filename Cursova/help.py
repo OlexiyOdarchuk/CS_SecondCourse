@@ -17,14 +17,18 @@ def input_variables(
     Returns:
         list[T] | list[list[T]]: Результат у вигляді списків елементів
     """
-    
-    actual_cols = cols if cols > 0 else amount
+    if amount < 1:
+        print("Помилка в коді. Не можна ввести менше 1 елементу")
+        exit(1)
+    actual_cols: int = cols if cols > 0 else amount
 
     if rows > 1:
-        matrix = []
+        matrix: list[T] = []
         for i in range(rows):
             while True:
-                line = input(f"Рядок {i + 1} (треба {actual_cols} елем. Вводьте через пробіл): ").split()
+                line: str = input(
+                    f"Рядок {i + 1} (треба {actual_cols} елем. Вводьте через пробіл): "
+                ).split()
                 if len(line) < actual_cols:
                     print(f"Замало даних! Треба хоча б {actual_cols}")
                     continue
@@ -37,7 +41,14 @@ def input_variables(
         return matrix
     else:
         while True:
-            line = input(f"Введіть {amount} елементів (через пробіл): ").split()
+            if amount%10 == 1:
+                line: str = input("Введіть значення: ").split()
+            elif amount%10 < 5:
+                line: str = input(
+                    f"Введіть {amount} елементи (через пробіл): "
+                ).split()
+            else:
+                line: str = input(f"Введіть {amount} елементів (через пробіл): ").split()
             if len(line) != amount:
                 print(f"Ви ввели {len(line)}, а треба {amount}. Спробуйте ще раз.")
                 continue
@@ -46,4 +57,3 @@ def input_variables(
                 return [convert_func(x) for x in line]
             except ValueError:
                 print("Помилка типу даних! Спробуйте ще раз.")
-
