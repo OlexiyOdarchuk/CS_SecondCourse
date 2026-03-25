@@ -8,7 +8,7 @@ def createArr(n: int) -> list[int]:
     return arr
 
 
-def selection_sort(arr):
+def selection_sort(arr: list[int]) -> list[int]:
     n = len(arr)
 
     for i in range(n):
@@ -26,7 +26,7 @@ def questNum() -> int:
     while True:
         try:
             n = int(
-                input("Введіть кількість елементів в масиві для другого завдання: ")
+                input("Введіть кількість елементів в масиві: ")
             )
             break
         except Exception:

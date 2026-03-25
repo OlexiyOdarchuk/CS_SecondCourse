@@ -6,10 +6,10 @@ def main():
     print("--- Курсова робота ---")
     print("--- Варіант 21 ---")
 
-    print("\n--- Завдання 1 ---")
-    print(
-        f"Результат виконання першого завдання: {first_task(*help.input_variables(float, amount=3))}"
-    )
+    # print("\n--- Завдання 1 ---")
+    # print(
+    #     f"Результат виконання першого завдання: {first_task(*help.input_variables(float, amount=3))}"
+    # )
     
     print("\n--- Завдання 2 ---")
     print (
