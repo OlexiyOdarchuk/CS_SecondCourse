@@ -1,4 +1,5 @@
 import math
+
 import help
 
 
@@ -6,15 +7,18 @@ def main():
     print("--- Курсова робота ---")
     print("--- Варіант 21 ---")
 
-    # print("\n--- Завдання 1 ---")
-    # print(
-    #     f"Результат виконання першого завдання: {first_task(*help.input_variables(float, amount=3))}"
-    # )
-    
-    print("\n--- Завдання 2 ---")
-    print (
-        f"Результат виконання другого завдання: {second_task(*help.input_variables(float))}"
+    print("\n--- Завдання 1 ---")
+    data = help.input_variables(float, amount=3)
+    print(
+        f"Результат виконання першого завдання: {first_task(*data[0])}"
     )
+
+    print("\n--- Завдання 2 ---")
+    data = help.input_variables(float)
+    print(
+        f"Результат виконання другого завдання: {second_task(*data[0])}"
+    )
+
 
 def first_task(x: float, y: float, z: float) -> float:
     """Перше завдання
@@ -28,7 +32,8 @@ def first_task(x: float, y: float, z: float) -> float:
         float: Результат обчислення
     """
     if x <= 0:
-        return "Помилка: x має бути більше 0 для обчислення ln(x)"
+        print("Помилка: x має бути більше 0 для обчислення ln(x)")
+        return 0
 
     term1: float = y - z
     numerator: float = y - (z ** (y - z))
@@ -37,6 +42,7 @@ def first_task(x: float, y: float, z: float) -> float:
 
     f: float = term1 * (numerator / denominator) + ln_x
     return f
+
 
 def second_task(x: float) -> float:
     """Друге завдання
@@ -55,7 +61,6 @@ def second_task(x: float) -> float:
     else:
         return x**a
 
+
 if __name__ == "__main__":
     main()
-
-
