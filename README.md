@@ -43,3 +43,4 @@ python TheSecondPractical/main.py
 - **`TheFirstPractical/`**: Практична №1 — містить `main.py` та супровідні файли.
 - **`TheSecondPractical/`**: Практична №2 — містить `main.py` і підпапку `tasks/` з окремими файлами завдань.
 - **`TheSecondPractical/tasks/`**: Файли завдань (наприклад, `TheFirst.py`, `TheSecond.py` тощо).
+- **`Cursova/`**: Курсова робота — містить `main.py` та супровідні файли.
