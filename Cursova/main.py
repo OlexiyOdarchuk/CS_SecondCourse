@@ -89,7 +89,7 @@ def third_task(x: float) -> float:
          print(f"{name}: {localResult}")
     
     for i in range(len(result)):
-         if math.isclose(result[i], result[0]):
+         if not math.isclose(result[i], result[0]):
               raise RuntimeError("Помилка. Результат відрізняється!")
          
     return result[0]
