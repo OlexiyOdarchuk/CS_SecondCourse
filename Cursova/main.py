@@ -7,21 +7,20 @@ def main():
     print("--- Курсова робота ---")
     print("--- Варіант 21 ---")
 
-    print("\n--- Завдання 1 ---")
-    data = help.input_variables(float, amount=3)
-    print(
-        f"Результат виконання першого завдання: {first_task(*data[0])}"
-    )
+    tasks = [
+        ("Завдання 1", first_task, 3),
+        ("Завдання 2", second_task, 1),
+        ("Завдання 3", third_task, 1),
+    ]
 
-    print("\n--- Завдання 2 ---")
-    data = help.input_variables(float)
-    print(
-        f"Результат виконання другого завдання: {second_task(*data[0])}"
-    )
-
-    print("\n--- Завдання 3 ---")
-    data = help.input_variables(float)
-    print(f"Результат виконання третього завдання: {third_task(*data[0])}")
+    for title, func, args_count in tasks:
+        print(f"\n--- {title} ---")
+        
+        data: list[list[float]] = help.input_variables(float, amount=args_count)
+        
+        result = func(*data[0])
+        
+        print(f"Результат виконання {title.lower()}: {result}")
 
 
 def first_task(x: float, y: float, z: float) -> float:
