@@ -195,14 +195,14 @@ def main():
     print("--- Варіант 21 ---")
 
     tasks = [
-        ("Завдання 1", first_task, 3),
+        ("Завдання 1", first_task, float, 3),
     ]
 
-    for title, func, args_count in tasks:
+    for title, func, data_type, args_count in tasks:
         print(f"\n--- {title} ---")
         
-        data: list[list[float]] = help.input_variables(float, amount=args_count)
-        
+        data: list[list] = help.input_variables(data_type, amount=args_count)
+
         result = func(*data[0])
         
         print(f"Результат виконання {title.lower()}: {result}")
@@ -265,15 +265,15 @@ def main():
     print("--- Варіант 21 ---")
 
     tasks = [
-        # ("Завдання 1", first_task, 3),
-        ("Завдання 2", second_task, 1),
+        # ("Завдання 1", first_task, float, 3),
+        ("Завдання 2", second_task, float, 1),
     ]
 
-    for title, func, args_count in tasks:
+    for title, func, data_type, args_count in tasks:
         print(f"\n--- {title} ---")
         
-        data: list[list[float]] = help.input_variables(float, amount=args_count)
-        
+        data: list[list] = help.input_variables(data_type, amount=args_count)
+
         result = func(*data[0])
         
         print(f"Результат виконання {title.lower()}: {result}")
@@ -309,10 +309,7 @@ if __name__ == "__main__":
 
 = ЗАВДАННЯ № 3
 
-*Умова задачі:* Скласти алгоритм розв’язування задачі циклічного алгоритму відповідно до
-
-заданого варіанту та подати його у вигляді блок-схеми. Розробити Python-
-програму для реалізації цього алгоритму.
+*Умова задачі:* Скласти алгоритм розв’язування задачі циклічного алгоритму відповідно до заданого варіанту та подати його у вигляді блок-схеми. Розробити Python-програму для реалізації цього алгоритму.
 
 Варіанти завдань: Скласти блок-схему та розробити програму для
 обчислення функції f(x) за значення змінної x, введеним з клавіатури.
@@ -410,16 +407,16 @@ def main():
     print("--- Варіант 21 ---")
 
     tasks = [
-        # ("Завдання 1", first_task, 3),
-        # ("Завдання 2", second_task, 1),
-        ("Завдання 3", third_task, 1),
+        # ("Завдання 1", first_task, float, 3),
+        # ("Завдання 2", second_task, float, 1),
+        ("Завдання 3", third_task, float, 1),
     ]
 
-    for title, func, args_count in tasks:
+    for title, func, data_type, args_count in tasks:
         print(f"\n--- {title} ---")
         
-        data: list[list[float]] = help.input_variables(float, amount=args_count)
-        
+        data: list[list] = help.input_variables(data_type, amount=args_count)
+
         result = func(*data[0])
         
         print(f"Результат виконання {title.lower()}: {result}")
@@ -464,15 +461,86 @@ if __name__ == "__main__":
 #flowchart("while_true_cycle_third_task.svg", width: 80%)
 
 
-// = ЗАВДАННЯ № 3
-// ...
+// ============================================================
+//  ЗАВДАННЯ 4
+// ============================================================
 
-// = ЗАВДАННЯ № 4
-// ...
+#pagebreak()
 
-// = ЗАВДАННЯ № 5
-// ...
+= ЗАВДАННЯ № 4
 
+*Умова задачі:* Скласти алгоритм розв’язування задачі відповідно до заданого варіанту та подати його у вигляді блок-схеми. Розробити Python-програму для реалізації цього алгоритму.
+
+Варіанти завдань: Нехай задано список різних випадкових чисе [a1, ..., an], значення n визначає користувач програми. Використовуючи генератор випадкових чисел, заповнити список [a1, ..., an] елементами: 
+
+а) цілими додатними числами, які лежать в діапазоні від 0 до 50 включно;
+
+б) цілими додатними та від‘ємними числами, які лежать в діапазоні від – 10 до 10 включно.
+
+Задано список (a). Написати програму визначення суми лише тих
+елементів, які є непарними числами.
+
+== Програмна реалізація алгоритму
+
+```python
+def fourth_task(n: int) -> int:
+    """Четверте завдання
+
+    Args:
+        n (int): число з клавіатури, що показує кількість елементів в списку
+
+    Returns:
+        int: сума елементів списку, які є непарними числами
+    """
+    return sum([i for i in [random.randint(0, 50) for _ in range(n)] if i % 2 != 0])
+
+def main():
+    print("--- Курсова робота ---")
+    print("--- Варіант 21 ---")
+
+    tasks = [
+        # ("Завдання 1", first_task, float, 3),
+        # ("Завдання 2", second_task, float, 1),
+        # ("Завдання 3", third_task, float, 1),
+        ("Завдання 4", fourth_task, int, 1)
+    ]
+
+    for title, func, data_type, args_count in tasks:
+        print(f"\n--- {title} ---")
+        
+        data: list[list] = help.input_variables(data_type, amount=args_count)
+
+        result = func(*data[0])
+        
+        print(f"Результат виконання {title.lower()}: {result}")
+
+if __name__ == "__main__":
+    main()
+```
+
+== Результат виконання коду
+
+#result[
+--- Курсова робота ---
+
+--- Варіант 21 ---
+
+--- Завдання 4 ---
+
+Введіть значення: 5
+
+Результат виконання завдання 4: 22
+]
+
+== Блок-схема алгоритму
+
+#flowchart("fourth_task.svg", caption: "Четверте завдання", width: 80%)
+
+
+// ============================================================
+//  ЗАВДАННЯ 5
+// ============================================================
+//....
 
 #pagebreak()
 #heading(numbering: none)[ДОДАТОК А]

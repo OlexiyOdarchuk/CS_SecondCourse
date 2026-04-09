@@ -1,23 +1,24 @@
 import math
 from typing import Callable
 import help
-
+import random
 
 def main():
     print("--- Курсова робота ---")
     print("--- Варіант 21 ---")
 
     tasks = [
-        ("Завдання 1", first_task, 3),
-        ("Завдання 2", second_task, 1),
-        ("Завдання 3", third_task, 1),
+        ("Завдання 1", first_task, float, 3),
+        ("Завдання 2", second_task, float, 1),
+        ("Завдання 3", third_task, float, 1),
+        ("Завдання 4", fourth_task, int, 1)
     ]
 
-    for title, func, args_count in tasks:
+    for title, func, data_type, args_count in tasks:
         print(f"\n--- {title} ---")
         
-        data: list[list[float]] = help.input_variables(float, amount=args_count)
-        
+        data: list[list] = help.input_variables(data_type, amount=args_count)
+
         result = func(*data[0])
         
         print(f"Результат виконання {title.lower()}: {result}")
@@ -142,5 +143,18 @@ def while_true_cycle_third_task(x: float) -> float:
             break
     return sum
     
+
+def fourth_task(n: int) -> int:
+    """Четверте завдання
+
+    Args:
+        n (int): число з клавіатури, що показує кількість елементів в списку
+
+    Returns:
+        int: сума елементів списку, які є непарними числами
+    """
+    return sum([i for i in [random.randint(0, 50) for _ in range(n)] if i % 2 != 0])
+
+
 if __name__ == "__main__":
     main()
