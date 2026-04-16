@@ -94,6 +94,12 @@
   v(0.1em)
 }
 
+// Стилізація коду
+#let code-style(body) = {
+  set text(size: 9pt) 
+  show raw: set par(leading: 0.35em) 
+  body
+}
 
 // ============================================================
 //  ТИТУЛЬНА СТОРІНКА
@@ -167,6 +173,7 @@
 
 == Програмна реалізація алгоритму
 
+#code-style(
 ```python
 def first_task(x: float, y: float, z: float) -> float:
     """Перше завдання
@@ -210,6 +217,7 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+)
 
 == Результат виконання коду
 
@@ -240,8 +248,11 @@ if __name__ == "__main__":
 
 Функція: #image("second_func.png")
 
+#pagebreak()
+
 == Програмна реалізація алгоритму
 
+#code-style(
 ```python
 def second_task(x: float) -> float:
     """Друге завдання
@@ -281,6 +292,7 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+)
 
 == Результат виконання коду
 
@@ -323,6 +335,7 @@ if __name__ == "__main__":
 
 == Програмна реалізація алгоритму
 
+#code-style(
 ```python
 def third_task(x: float) -> float:
     """Третє завдання
@@ -424,6 +437,7 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+)
 
 == Результат виконання коду
 
@@ -480,8 +494,11 @@ if __name__ == "__main__":
 Задано список (a). Написати програму визначення суми лише тих
 елементів, які є непарними числами.
 
+#pagebreak()
+
 == Програмна реалізація алгоритму
 
+#code-style(
 ```python
 def fourth_task(n: int) -> int:
     """Четверте завдання
@@ -517,6 +534,7 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+)
 
 == Результат виконання коду
 
@@ -547,7 +565,7 @@ if __name__ == "__main__":
 #align(center)[#text(weight: "bold")[Програмний код допоміжного модуля (help.py)]]
 
 #v(1em)
-
+#code-style(
 ```python
 from typing import Any, Callable, Optional, TypeVar, Union
 
@@ -655,5 +673,5 @@ def input_variables(
 
     return result
 ```
-
+)
 #flowchart("help.svg", caption: "Допоміжна функція input_variables", width: 60%)
