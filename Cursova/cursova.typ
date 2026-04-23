@@ -1,7 +1,12 @@
+#import "@preview/fletcher:0.5.8" as fletcher: diagram, edge, node
+
+#let dstu-stroke = 0.7pt
+#let shapes = fletcher.shapes
+
 // ---------- НАЛАШТУВАННЯ СТОРІНКИ ----------
 #set page(
   paper: "a4",
-  margin: (top: 20mm, bottom: 20mm, left: 30mm, right: 15mm),
+  margin: (top: 15mm, bottom: 15mm, left: 25mm, right: 10mm),
   numbering: "1",
   number-align: center,
 )
@@ -48,37 +53,34 @@
 
 // ---------- КОД ----------
 #show raw.where(block: true): it => {
-  set par(first-line-indent: 0pt, justify: false)
+  set par(first-line-indent: 0pt, justify: false, leading: 0.65em)
   block(
-    fill: luma(245),
-    stroke: (left: 3pt + luma(160)),
     inset: (x: 10pt, y: 8pt),
-    radius: 2pt,
     width: 100%,
-    text(font: "Courier New", size: 11pt, it),
+    text(font: "Times New Roman", size: 14pt, it),
   )
 }
 
+
 // ---------- ДОПОМІЖНІ ФУНКЦІЇ ----------
 
-// Блок "Результат виконання"
-#let result(content) = block(
-  fill: luma(250),
-  stroke: 0.5pt + luma(180),
+#let result(body) = block(
   inset: (x: 10pt, y: 8pt),
   radius: 2pt,
   width: 100%,
   {
-    set par(first-line-indent: 0pt, justify: false)
-    text(font: "Courier New", size: 11pt, content)
+    set par(first-line-indent: 0pt, justify: false, leading: 0.65em)
+    set text(font: "Times New Roman", size: 14pt)
+    show raw.where(block: true): it => it
+    body
   },
 )
 
-// Блок-схема з SVG-файлу
-#let flowchart(path, caption: none, width: 60%) = {
+// Блок-схема (fletcher diagram)
+#let flowchart(body, caption: none) = {
   set par(first-line-indent: 0pt)
   align(center, {
-    image(path, width: width)
+    body
     if caption != none {
       v(0.3em)
       text(size: 12pt, style: "italic", caption)
@@ -174,7 +176,7 @@
 == Програмна реалізація алгоритму
 
 #code-style(
-```python
+```
 def first_task(x: float, y: float, z: float) -> float:
     """Перше завдання
 
@@ -222,20 +224,59 @@ if __name__ == "__main__":
 == Результат виконання коду
 
 #result[
+```
 --- Курсова робота ---
-
 --- Варіант 21 ---
 
 --- Завдання 1 ---
-
 Введіть значення: 25.825 12.02 3.298
-
 Результат виконання завдання 1: -429.17216523536393
+```
 ]
 
 == Блок-схема алгоритму
 
-#flowchart("first_task.svg", caption: "Перше завдання", width: 100%)
+#flowchart(
+  caption: "Перше завдання",
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 9mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t1-start>),
+    edge(<t1-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $x, y, z$], shape: shapes.parallelogram, name: <t1-in>),
+    edge(<t1-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$x <= 0$], shape: shapes.diamond, name: <t1-if>),
+
+    edge(<t1-if>, (-2.2, 2), (-2.2, 3), "-|>", label: [Так], label-pos: 0.2),
+    node((-2.2, 3), [Виведення «Помилка: $x > 0$»], shape: shapes.parallelogram, name: <t1-err>),
+    edge(<t1-err>, (-2.2, 9), (0, 9), "-|>"),
+
+    edge(<t1-if>, (0, 3), "-|>", label: [Ні], label-pos: 0.5),
+    node((0, 3), [$t = y - z$], shape: rect, name: <t1-c1>),
+    edge(<t1-c1>, (0, 4), "-|>"),
+
+    node((0, 4), [$N = y - z^(y - z)$], shape: rect, name: <t1-c2>),
+    edge(<t1-c2>, (0, 5), "-|>"),
+
+    node((0, 5), [$D = 1 + x^2$], shape: rect, name: <t1-c3>),
+    edge(<t1-c3>, (0, 6), "-|>"),
+
+    node((0, 6), [$L = ln x$], shape: rect, name: <t1-c4>),
+    edge(<t1-c4>, (0, 7), "-|>"),
+
+    node((0, 7), [$f = t dot N slash D + L$], shape: rect, name: <t1-c5>),
+    edge(<t1-c5>, (0, 8), "-|>"),
+
+    node((0, 8), [Виведення $f$], shape: shapes.parallelogram, name: <t1-out>),
+    edge(<t1-out>, (0, 9), "-|>"),
+
+    node((0, 9), [Кінець], shape: rect, corner-radius: 10pt, name: <t1-end>),
+  ),
+)
 
 #pagebreak()
 
@@ -259,7 +300,7 @@ $
 == Програмна реалізація алгоритму
 
 #code-style(
-```python
+```
 def second_task(x: float) -> float:
     """Друге завдання
 
@@ -303,20 +344,63 @@ if __name__ == "__main__":
 == Результат виконання коду
 
 #result[
+```
 --- Курсова робота ---
-
 --- Варіант 21 ---
 
 --- Завдання 2 ---
-
 Введіть значення: 5
-
 Результат виконання завдання 2: 1.9490946627437105
+```
 ]
 
 == Блок-схема алгоритму
 
-#flowchart("second_task.svg", caption: "Друге завдання", width: 55%)
+#flowchart(
+  caption: "Друге завдання",
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (22mm, 12mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t2-start>),
+    edge(<t2-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $x$], shape: shapes.parallelogram, name: <t2-in>),
+    edge(<t2-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$a = 3.1$], shape: rect, name: <t2-a>),
+    edge(<t2-a>, (0, 3), "-|>"),
+
+    node((0, 3), [$x > 1$], shape: shapes.diamond, name: <t2-if1>),
+
+    // Гілка "Так" для x > 1 — ліворуч
+    edge(<t2-if1>, (-2.2, 3), (-2.2, 5), "-|>", label: [Так], label-pos: 0.2),
+    node((-2.2, 5), [$y = sqrt(a + lg x)$], shape: rect, name: <t2-b1>),
+
+    // Гілка "Ні" для x > 1 — вниз до наступної умови
+    edge(<t2-if1>, (0, 4), "-|>", label: [Ні], label-pos: 0.5),
+    node((0, 4), [$abs(x) < 1$], shape: shapes.diamond, name: <t2-if2>),
+
+    // Гілка "Так" для |x|<1 — вниз
+    edge(<t2-if2>, (0, 5), "-|>", label: [Так], label-pos: 0.5),
+    node((0, 5), [$y = arcsin x$], shape: rect, name: <t2-b2>),
+
+    // Гілка "Ні" для |x|<1 — праворуч
+    edge(<t2-if2>, (2.2, 4), (2.2, 5), "-|>", label: [Ні], label-pos: 0.2),
+    node((2.2, 5), [$y = x^a$], shape: rect, name: <t2-b3>),
+
+    // Збирання трьох гілок у точці (0, 6)
+    edge(<t2-b1>, (-2.2, 6), (0, 6), "-|>"),
+    edge(<t2-b2>, (0, 6), "-|>"),
+    edge(<t2-b3>, (2.2, 6), (0, 6), "-|>"),
+
+    node((0, 6), [Виведення $y$], shape: shapes.parallelogram, name: <t2-out>),
+    edge(<t2-out>, (0, 7), "-|>"),
+
+    node((0, 7), [Кінець], shape: rect, corner-radius: 10pt, name: <t2-end>),
+  ),
+)
 
 
 // ============================================================
@@ -342,7 +426,7 @@ if __name__ == "__main__":
 == Програмна реалізація алгоритму
 
 #code-style(
-```python
+```
 def third_task(x: float) -> float:
     """Третє завдання
 
@@ -448,37 +532,155 @@ if __name__ == "__main__":
 == Результат виконання коду
 
 #result[
-    --- Курсова робота ---
+```
+--- Курсова робота ---
+--- Варіант 21 ---
 
-    --- Варіант 21 ---
-
-    --- Завдання 3 ---
-    
-    Введіть значення: -0.361
-    
-    Виконання циклу з лічильником: 0.09331608870197027
-
-    
-    Виконання циклу з передумовою: 0.09331608870197027
-    
-    Виконання циклу з післяумовою: 0.09331608870197027
-    
-    Результат виконання завдання 3: 0.09331608870197027
+--- Завдання 3 ---
+Введіть значення: -0.361
+Виконання циклу з лічильником: 0.09331608870197027
+Виконання циклу з передумовою: 0.09331608870197027
+Виконання циклу з післяумовою: 0.09331608870197027
+Результат виконання завдання 3: 0.09331608870197027
+```
 ]
 
 == Блок-схеми функцій
 
-=== Блок-схема до основної функції third_task 
-#flowchart("third_task.svg", width: 100%)
+=== Блок-схема до основної функції third_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (22mm, 10mm),
+    mark-scale: 80%,
 
-=== Блок-схема до функції for_cycle_third_task 
-#flowchart("for_cycle_third_task.svg", width: 100%)
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t3-start>),
+    edge(<t3-start>, (0, 1), "-|>"),
 
-=== Блок-схема до функції while_cycle_third_task 
-#flowchart("while_cycle_third_task.svg", width: 100%)
+    node((0, 1), [Введення $x$], shape: shapes.parallelogram, name: <t3-in>),
+    edge(<t3-in>, (0, 2), "-|>"),
 
-=== Блок-схема до функції while_true_cycle_third_task 
-#flowchart("while_true_cycle_third_task.svg", width: 80%)
+    node((0, 2), [$r_1 = "for_cycle_third_task"(x)$], shape: rect, extrude: (2pt, 0pt), name: <t3-f1>),
+    edge(<t3-f1>, (0, 3), "-|>"),
+
+    node((0, 3), [$r_2 = "while_cycle_third_task"(x)$], shape: rect, extrude: (2pt, 0pt), name: <t3-f2>),
+    edge(<t3-f2>, (0, 4), "-|>"),
+
+    node((0, 4), [$r_3 = "while_true_cycle_third_task"(x)$], shape: rect, extrude: (2pt, 0pt), name: <t3-f3>),
+    edge(<t3-f3>, (0, 5), "-|>"),
+
+    node((0, 5), [Виведення $r_1, r_2, r_3$], shape: shapes.parallelogram, name: <t3-out>),
+    edge(<t3-out>, (0, 6), "-|>"),
+
+    node((0, 6), [$r_1 approx r_2 approx r_3$], shape: shapes.diamond, name: <t3-if>),
+
+    edge(<t3-if>, (-2, 6), (-2, 7), "-|>", label: [Ні], label-pos: 0.2),
+    node((-2, 7), [Помилка: \ «Результат відрізняється»], shape: shapes.parallelogram, name: <t3-err>),
+    edge(<t3-err>, (-2, 8), (0, 8), "-|>"),
+
+    edge(<t3-if>, (0, 7), "-|>", label: [Так], label-pos: 0.5),
+    node((0, 7), [Повернути $r_1$], shape: rect, name: <t3-ret>),
+    edge(<t3-ret>, (0, 8), "-|>"),
+
+    node((0, 8), [Кінець], shape: rect, corner-radius: 10pt, name: <t3-end>),
+  ),
+)
+
+=== Блок-схема до функції for_cycle_third_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t3f-start>),
+    edge(<t3f-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $x$], shape: shapes.parallelogram, name: <t3f-in>),
+    edge(<t3f-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$S = 0$], shape: rect, name: <t3f-init>),
+    edge(<t3f-init>, (0, 3), "-|>"),
+
+    node((0, 3), [$k = 1, 6, 1$], shape: shapes.hexagon, name: <t3f-for>),
+    edge(<t3f-for>, (0, 4), "-|>"),
+
+    node((0, 4), [$S = S + sin(0.17 dot x^k) / k^2 + x^(2k)$], shape: rect, name: <t3f-body>),
+    edge(<t3f-body>, (1.5, 4), (1.5, 3), <t3f-for>, "-|>"),
+
+    edge(<t3f-for>, (-1.5, 3), (-1.5, 5), "-|>"),
+    node((-1.5, 5), [Виведення $S$], shape: shapes.parallelogram, name: <t3f-out>),
+    edge(<t3f-out>, (-1.5, 6), "-|>"),
+
+    node((-1.5, 6), [Кінець], shape: rect, corner-radius: 10pt, name: <t3f-end>),
+  ),
+)
+
+=== Блок-схема до функції while_cycle_third_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t3w-start>),
+    edge(<t3w-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $x$], shape: shapes.parallelogram, name: <t3w-in>),
+    edge(<t3w-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$S = 0$, $k = 1$], shape: rect, name: <t3w-init>),
+    edge(<t3w-init>, (0, 3), "-|>"),
+
+    node((0, 3), [$k < 7$], shape: shapes.diamond, name: <t3w-if>),
+
+    edge(<t3w-if>, (0, 4), "-|>", label: [Так], label-pos: 0.5),
+    node((0, 4), [$S = S + sin(0.17 dot x^k) / k^2 + x^(2k)$], shape: rect, name: <t3w-body>),
+    edge(<t3w-body>, (0, 5), "-|>"),
+
+    node((0, 5), [$k = k + 1$], shape: rect, name: <t3w-inc>),
+    edge(<t3w-inc>, (1.6, 5), (1.6, 3), <t3w-if>, "-|>"),
+
+    edge(<t3w-if>, (-1.6, 3), (-1.6, 4), "-|>", label: [Ні], label-pos: 0.2),
+    node((-1.6, 4), [Виведення $S$], shape: shapes.parallelogram, name: <t3w-out>),
+    edge(<t3w-out>, (-1.6, 5), "-|>"),
+
+    node((-1.6, 5), [Кінець], shape: rect, corner-radius: 10pt, name: <t3w-end>),
+  ),
+)
+
+=== Блок-схема до функції while_true_cycle_third_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t3wt-start>),
+    edge(<t3wt-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $x$], shape: shapes.parallelogram, name: <t3wt-in>),
+    edge(<t3wt-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$S = 0$, $k = 1$], shape: rect, name: <t3wt-init>),
+    edge(<t3wt-init>, (0, 3), "-|>"),
+
+    node((0, 3), [$S = S + sin(0.17 dot x^k) / k^2 + x^(2k)$], shape: rect, name: <t3wt-body>),
+    edge(<t3wt-body>, (0, 4), "-|>"),
+
+    node((0, 4), [$k = k + 1$], shape: rect, name: <t3wt-inc>),
+    edge(<t3wt-inc>, (0, 5), "-|>"),
+
+    node((0, 5), [$k >= 7$], shape: shapes.diamond, name: <t3wt-if>),
+    edge(<t3wt-if>, (-1.6, 5), (-1.6, 3), <t3wt-body>, "-|>", label: [Ні], label-pos: 0.15),
+
+    edge(<t3wt-if>, (0, 6), "-|>", label: [Так], label-pos: 0.5),
+    node((0, 6), [Виведення $S$], shape: shapes.parallelogram, name: <t3wt-out>),
+    edge(<t3wt-out>, (0, 7), "-|>"),
+
+    node((0, 7), [Кінець], shape: rect, corner-radius: 10pt, name: <t3wt-end>),
+  ),
+)
 
 
 // ============================================================
@@ -505,7 +707,7 @@ if __name__ == "__main__":
 == Програмна реалізація алгоритму
 
 #code-style(
-```python
+```
 def fourth_task(n: int) -> int:
     """Четверте завдання
 
@@ -545,20 +747,58 @@ if __name__ == "__main__":
 == Результат виконання коду
 
 #result[
+```
 --- Курсова робота ---
-
 --- Варіант 21 ---
 
 --- Завдання 4 ---
-
 Введіть значення: 5
-
 Результат виконання завдання 4: 22
+```
 ]
 
 == Блок-схема алгоритму
 
-#flowchart("fourth_task.svg", caption: "Четверте завдання", width: 80%)
+#flowchart(
+  caption: "Четверте завдання",
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t4-start>),
+    edge(<t4-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $n$], shape: shapes.parallelogram, name: <t4-in>),
+    edge(<t4-in>, (0, 2), "-|>"),
+
+    node((0, 2), [
+      $A = ["randint"(0, 50)$ \
+      $"для" _ "у діапазоні" [1, n]]$
+    ], shape: rect, name: <t4-list>),
+    edge(<t4-list>, (0, 3), "-|>"),
+
+    node((0, 3), [$S = 0$], shape: rect, name: <t4-s>),
+    edge(<t4-s>, (0, 4), "-|>"),
+
+    node((0, 4), [для кожного $a in A$], shape: shapes.hexagon, name: <t4-for>),
+    edge(<t4-for>, (0, 5), "-|>"),
+
+    node((0, 5), [$a mod 2 != 0$], shape: shapes.diamond, name: <t4-if>),
+
+    edge(<t4-if>, (0, 6), "-|>", label: [Так], label-pos: 0.5),
+    node((0, 6), [$S = S + a$], shape: rect, name: <t4-add>),
+    edge(<t4-add>, (1.6, 6), (1.6, 4), <t4-for>, "-|>"),
+
+    edge(<t4-if>, (1.6, 5), (1.6, 4), <t4-for>, "-|>", label: [Ні], label-pos: 0.15),
+
+    edge(<t4-for>, (-1.6, 4), (-1.6, 7), "-|>"),
+    node((-1.6, 7), [Виведення $S$], shape: shapes.parallelogram, name: <t4-out>),
+    edge(<t4-out>, (-1.6, 8), "-|>"),
+
+    node((-1.6, 8), [Кінець], shape: rect, corner-radius: 10pt, name: <t4-end>),
+  ),
+)
 
 
 // ============================================================
@@ -583,13 +823,13 @@ if __name__ == "__main__":
 
 4. Скласти блок-схеми для цих підпрограм.
 
-#pagebreak()
-
 == Програмна реалізація алгоритму
 
 #code-style(
-```python
+```
 def fifth_task():
+    """Запуск п'ятого завдання
+    """
     height, width = 5, 5
     matrix = create_matrix_fifth_task(height, width)
     vector = create_vector_fifth_task(matrix)
@@ -598,7 +838,17 @@ def fifth_task():
     print("\nСтворений вектор:")
     print_vector_fifth_task(vector)
 
+
 def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
+    """Створення матриці для п'ятого завдання
+
+    Args:
+        height (int): висота матриці
+        width (int): ширина матриці
+
+    Returns:
+        list[list[float]]: матриця з чисел, обличислених по формулі  (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+    """
     matrix: list[list[float]] = [[0.0 for _ in range(width + 1)] for _ in range(height + 1)]
     for i in range(1, height + 1):
         for j in range(1, width + 1):
@@ -607,12 +857,27 @@ def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
 
     return matrix
 
+
 def create_vector_fifth_task(matrix: list[list[float]]) -> list[float]:
+    """Створення вектора
+
+    Args:
+        matrix (list[list[float]]): Матриця, на основі якої створюється вектор
+
+    Returns:
+        list[float]: масив з сум елементів в непарних рядках матриці
+    """
     vector: list[float] = [sum(matrix[i]) for i in range(1, len(matrix)) if i % 2 != 0]
 
     return vector
 
+
 def print_matrix_fifth_task(matrix: list[list[float]]):
+    """Вивід матриці
+
+    Args:
+        matrix (list[list[float]]): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
+    """
     max_len: float = max(len(str(item)) for row in matrix for item in row)
     for row in range(1, len(matrix)):
         if row == 0:
@@ -620,10 +885,15 @@ def print_matrix_fifth_task(matrix: list[list[float]]):
         formatted_row: list[str] = [f"{item:>{max_len}.3f}" for item in matrix[row]]
         print(*formatted_row)
 
+
 def print_vector_fifth_task(vector: list[float]):
-    for elem in vector:
-        print(f"{elem:.3f}", end=" ")
-    print()
+    """Вивід вектора
+
+    Args:
+        vector (list[float]): Вектор, який потрібно вивести
+    """
+    formatted_elements: list[str] = [f"{item:.3f}" for item in vector]
+    print(*formatted_elements)
 
 def main():
     print("--- Курсова робота ---")
@@ -654,28 +924,179 @@ if __name__ == "__main__":
 ```
 )
 
+#pagebreak()
+
 == Результат виконання коду
 
 #result[
-  --- Курсова робота ---
-  
-  --- Варіант 21 ---
-  
-  --- Завдання 5 ---
-  Створена матриця:
-  0.000              3.828              3.481              3.412              3.423              3.462
-  0.000              7.000              5.330              4.623              4.332              4.228
-  0.000             11.937              8.681              7.000              6.121              5.658
-  0.000             19.287             13.621             10.544              8.826              7.838
-  0.000             30.967             20.980             15.576             12.555             10.798
+```
+--- Курсова робота ---
+--- Варіант 21 ---
 
-  Створений вектор:
-  17.607 39.398 90.876 
+--- Завдання 5 ---
+Створена матриця:
+0.000              3.828              3.481              3.412              3.423              3.462
+0.000              7.000              5.330              4.623              4.332              4.228
+0.000             11.937              8.681              7.000              6.121              5.658
+0.000             19.287             13.621             10.544              8.826              7.838
+0.000             30.967             20.980             15.576             12.555             10.798
+
+Створений вектор:
+17.607 39.398 90.876
+```
 ]
 
-== Блок-схема алгоритму
+== Блок-схеми підпрограм
 
-#flowchart("fourth_task.svg", caption: "Четверте завдання", width: 80%)
+=== Блок-схема функції fifth_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (22mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5m-start>),
+    edge(<t5m-start>, (0, 1), "-|>"),
+
+    node((0, 1), [$h = 5$, $w = 5$], shape: rect, name: <t5m-hw>),
+    edge(<t5m-hw>, (0, 2), "-|>"),
+
+    node((0, 2), [$M = "create_matrix_fifth_task"(h, w)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-cm>),
+    edge(<t5m-cm>, (0, 3), "-|>"),
+
+    node((0, 3), [$V = "create_vector_fifth_task"(M)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-cv>),
+    edge(<t5m-cv>, (0, 4), "-|>"),
+
+    node((0, 4), [$"print_matrix_fifth_task"(M)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-pm>),
+    edge(<t5m-pm>, (0, 5), "-|>"),
+
+    node((0, 5), [$"print_vector_fifth_task"(V)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-pv>),
+    edge(<t5m-pv>, (0, 6), "-|>"),
+
+    node((0, 6), [Кінець], shape: rect, corner-radius: 10pt, name: <t5m-end>),
+  ),
+)
+
+=== Блок-схема функції create_matrix_fifth_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5cm-start>),
+    edge(<t5cm-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $h, w$], shape: shapes.parallelogram, name: <t5cm-in>),
+    edge(<t5cm-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$M = 0_((h+1) times (w+1))$], shape: rect, name: <t5cm-init>),
+    edge(<t5cm-init>, (0, 3), "-|>"),
+
+    node((0, 3), [$i = 1, h, 1$], shape: shapes.hexagon, name: <t5cm-fi>),
+    edge(<t5cm-fi>, (0, 4), "-|>"),
+
+    node((0, 4), [$j = 1, w, 1$], shape: shapes.hexagon, name: <t5cm-fj>),
+    edge(<t5cm-fj>, (0, 5), "-|>"),
+
+    node((0, 5), [$M_(i,j) = (3+i)/(i+j) dot sqrt(i^3 + j^2) + 2^(i-j)$], shape: rect, name: <t5cm-body>),
+    edge(<t5cm-body>, (2, 5), (2, 4), <t5cm-fj>, "-|>"),
+
+    edge(<t5cm-fj>, (-1.7, 4), (-1.7, 3), <t5cm-fi>, "-|>"),
+
+    edge(<t5cm-fi>, (2.2, 3), (2.2, 6), "-|>"),
+    node((2.2, 6), [Повернути $M$], shape: shapes.parallelogram, name: <t5cm-ret>),
+    edge(<t5cm-ret>, (2.2, 7), "-|>"),
+
+    node((2.2, 7), [Кінець], shape: rect, corner-radius: 10pt, name: <t5cm-end>),
+  ),
+)
+
+=== Блок-схема функції create_vector_fifth_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5cv-start>),
+    edge(<t5cv-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $M$], shape: shapes.parallelogram, name: <t5cv-in>),
+    edge(<t5cv-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$V = [ ]$], shape: rect, name: <t5cv-init>),
+    edge(<t5cv-init>, (0, 3), "-|>"),
+
+    node((0, 3), [$i = 1, "len"(M)-1, 1$], shape: shapes.hexagon, name: <t5cv-for>),
+    edge(<t5cv-for>, (0, 4), "-|>"),
+
+    node((0, 4), [$i mod 2 != 0$], shape: shapes.diamond, name: <t5cv-if>),
+    edge(<t5cv-if>, (0, 5), "-|>", label: [Так], label-pos: 0.5),
+
+    node((0, 5), [$V$.append$("sum"(M_i))$], shape: rect, name: <t5cv-app>),
+    edge(<t5cv-app>, (1.7, 5), (1.7, 3), <t5cv-for>, "-|>"),
+
+    edge(<t5cv-if>, (1.7, 4), (1.7, 3), <t5cv-for>, "-|>", label: [Ні], label-pos: 0.15),
+
+    edge(<t5cv-for>, (-1.7, 3), (-1.7, 5), "-|>"),
+    node((-1.7, 5), [Повернути $V$], shape: shapes.parallelogram, name: <t5cv-ret>),
+    edge(<t5cv-ret>, (-1.7, 6), "-|>"),
+
+    node((-1.7, 6), [Кінець], shape: rect, corner-radius: 10pt, name: <t5cv-end>),
+  ),
+)
+
+=== Блок-схема функції print_matrix_fifth_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5pm-start>),
+    edge(<t5pm-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $M$], shape: shapes.parallelogram, name: <t5pm-in>),
+    edge(<t5pm-in>, (0, 2), "-|>"),
+
+    node((0, 2), [$"max_len" = max(|x|: x in M)$], shape: rect, name: <t5pm-init>),
+    edge(<t5pm-init>, (0, 3), "-|>"),
+
+    node((0, 3), [$"row" = 1, "len"(M)-1, 1$], shape: shapes.hexagon, name: <t5pm-for>),
+    edge(<t5pm-for>, (0, 4), "-|>"),
+
+    node((0, 4), [Виведення \ рядка $M_"row"$], shape: shapes.parallelogram, name: <t5pm-out>),
+    edge(<t5pm-out>, (1.7, 4), (1.7, 3), <t5pm-for>, "-|>"),
+
+    edge(<t5pm-for>, (-1.7, 3), (-1.7, 4), "-|>"),
+    node((-1.7, 4), [Кінець], shape: rect, corner-radius: 10pt, name: <t5pm-end>),
+  ),
+)
+
+=== Блок-схема функції print_vector_fifth_task
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 10mm),
+    mark-scale: 80%,
+
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5pv-start>),
+    edge(<t5pv-start>, (0, 1), "-|>"),
+
+    node((0, 1), [Введення $V$], shape: shapes.parallelogram, name: <t5pv-in>),
+    edge(<t5pv-in>, (0, 2), "-|>"),
+
+    node((0, 2), [для кожного $e in V$], shape: shapes.hexagon, name: <t5pv-for>),
+    edge(<t5pv-for>, (0, 3), "-|>"),
+
+    node((0, 3), [Виведення $e$], shape: shapes.parallelogram, name: <t5pv-out>),
+    edge(<t5pv-out>, (1.7, 3), (1.7, 2), <t5pv-for>, "-|>"),
+
+    edge(<t5pv-for>, (-1.7, 2), (-1.7, 3), "-|>"),
+    node((-1.7, 3), [Кінець], shape: rect, corner-radius: 10pt, name: <t5pv-end>),
+  ),
+)
 
 
 #pagebreak()
@@ -689,7 +1110,7 @@ if __name__ == "__main__":
 
 #v(1em)
 #code-style(
-```python
+```
 from typing import Any, Callable, Optional, TypeVar, Union
 
 T = TypeVar("T")
@@ -797,4 +1218,134 @@ def input_variables(
     return result
 ```
 )
-#flowchart("help.svg", caption: "Допоміжна функція input_variables", width: 60%)
+== Блок-схеми підпрограм
+
+=== Блок-схема функції input_variables
+#flowchart(
+  diagram(
+    node-stroke: dstu-stroke,
+    spacing: (5mm, 14mm),
+    mark-scale: 80%,
+    
+    // 1. Початок
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <start>),
+    edge(<start>, (0, 1), "-|>"),
+    
+    // 2. Умова (Перевірка amount)
+    node((0, 1), [ amount < 1 ], shape: shapes.diamond, name: <check-amount>),
+    edge(<check-amount>, (1, 1), "-|>", label: [Так], label-pos: 0.2),
+    node((1, 1), [ValueError ], shape: rect, name: <err-amount>),
+    
+    // 3. Ініціалізація
+    edge(<check-amount>, (0, 2), "-|>", label: [Ні], label-pos: 0.2),
+    node((0, 2), [ actual_cols = ... \ result = [] ], shape: rect, name: <init>),
+    edge(<init>, (0, 3), "-|>"),
+    
+    // 4. Цикл FOR (по рядках)
+    node((0, 3), [ r = 0, rows-1, 1 ], shape: shapes.hexagon, name: <for-r>),
+    edge(<for-r>, (0, 4), "-|>"),
+    
+    // 5. Тіло циклу
+    node((0, 4), [ Формування\ підказки (prompt) ], shape: rect, name: <prompt>),
+    edge(<prompt>, (0, 5), "-|>"),
+    
+    node((0, 5), [ Введення рядка line ], shape: shapes.parallelogram, name: <input>),
+    edge(<input>, (0, 6), "-|>"),
+    
+    // 6. Виклик вкладеної функції
+    node((0, 6), [ Виклик process_line() ], shape: rect, extrude: (2pt, 0pt), name: <process>),
+    edge(<process>, (0, 7), "-|>"),
+    
+    // 7. Перевірка на помилки
+    node((0, 7), [ Виникла\ помилка? ], shape: shapes.diamond, name: <check-err>),
+    
+    // Гілка з помилкою
+    edge(<check-err>, (-1.2, 7), "-|>", label: [Так], label-pos: 0.2),
+    node((-1.2, 7), [ Виведення\ попередження ], shape: shapes.parallelogram, name: <print-warn>),
+    edge(<print-warn>, (-1.2, 4), (0, 4), "-|>"), 
+    
+    // Гілка успіху
+    edge(<check-err>, (0, 8), "-|>", label: [Ні], label-pos: 0.2),
+    node((0, 8), [ result.append(row) ], shape: rect, name: <append>),
+    
+    // Повернення в цикл FOR
+    edge(<append>, (1.2, 8), (1.2, 3), (0.6, 3), <for-r>, "-|>"),
+    
+    // 8. Вихід з циклу FOR
+    edge(<for-r>, (2.2, 3), (2.2, 9), "-|>"),
+    node((2.2, 9), [ Повернення result ], shape: shapes.parallelogram, name: <ret>),
+    edge(<ret>, (2.2, 10), "-|>"),
+    
+    // 9. Кінець
+    node((2.2, 10), [Кінець], shape: rect, corner-radius: 10pt, name: <end>),
+  ),
+)
+
+=== Блок-схема функції process_line
+
+#flowchart(
+    diagram(
+    node-stroke: dstu-stroke,
+    spacing: (20mm, 12mm),
+    mark-scale: 80%,
+    
+    // 1. Початок
+    node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <start>),
+    edge(<start>, (0, 1), "-|>"),
+    
+    // 2. Розбиття рядка
+    node((0, 1), [ parts = line.split() ], shape: rect, name: <split>),
+    edge(<split>, (0, 2), "-|>"),
+    
+    // 3. Умова перевірки кількості
+    node((0, 2), [ len(parts) < exp ], shape: shapes.diamond, name: <chk-len>),
+    edge(<chk-len>, (1.5, 2), "-|>", label: [Так], label-pos: 0.2),
+    node((1.5, 2), [ ValueError ], shape: rect, name: <err1>),
+    
+    // 4. Обрізка і конвертація
+    edge(<chk-len>, (0, 3), "-|>", label: [Ні], label-pos: 0.2),
+    node((0, 3), [ parts = parts[:exp] ], shape: rect, name: <slice>),
+    edge(<slice>, (0, 4), "-|>"),
+    
+    node((0, 4), [ Конвертація parts в T ], shape: rect, name: <conv>),
+    edge(<conv>, (0, 5), "-|>"),
+    
+    // 5. Перевірка успішності конвертації
+    node((0, 5), [ Помилка\ конвертації? ], shape: shapes.diamond, name: <chk-conv>),
+    edge(<chk-conv>, (1.5, 5), "-|>", label: [Так], label-pos: 0.2),
+    node((1.5, 5), [ ValueError ], shape: rect, name: <err2>),
+    
+    // 6. Цикл валідації
+    edge(<chk-conv>, (0, 6), "-|>", label: [Ні], label-pos: 0.2),
+    node((0, 6), [ val у parsed ], shape: shapes.hexagon, name: <for-val>),
+    edge(<for-val>, (0, 7), "-|>"),
+    
+    // 7. Валідація довжини
+    node((0, 7), [ Довжина\ некоректна? ], shape: shapes.diamond, name: <chk-len2>),
+    edge(<chk-len2>, (1.5, 7), "-|>", label: [Так], label-pos: 0.2),
+    node((1.5, 7), [ ValueError ], shape: rect, name: <err3>),
+    
+    // 8. Валідація діапазону
+    edge(<chk-len2>, (0, 8), "-|>", label: [Ні], label-pos: 0.2),
+    node((0, 8), [ Поза лімітами\ (min/max)? ], shape: shapes.diamond, name: <chk-lim>),
+    edge(<chk-lim>, (1.5, 8), "-|>", label: [Так], label-pos: 0.2),
+    node((1.5, 8), [ ValueError ], shape: rect, name: <err4>),
+    
+    // 9. Кастомний валідатор
+    edge(<chk-lim>, (0, 9), "-|>", label: [Ні], label-pos: 0.2),
+    node((0, 9), [ Не пройшло\ validator? ], shape: shapes.diamond, name: <chk-val>),
+    edge(<chk-val>, (1.5, 9), "-|>", label: [Так], label-pos: 0.2),
+    node((1.5, 9), [ ValueError ], shape: rect, name: <err5>),
+    
+    // Повернення на наступну ітерацію циклу
+    edge(<chk-val>, (-1, 9), (-1, 6), <for-val>, "-|>", label: [Ні], label-pos: 0.1),
+    
+    // 10. Вихід з циклу
+    edge(<for-val>, (2.5, 6), (2.5, 10), "-|>"),
+    node((2.5, 10), [ Повернення parsed ], shape: shapes.parallelogram, name: <ret>),
+    edge(<ret>, (2.5, 11), "-|>"),
+    
+    // 11. Кінець
+    node((2.5, 11), [Кінець], shape: rect, corner-radius: 10pt, name: <end>),
+  ),
+)

@@ -159,6 +159,8 @@ def fourth_task(n: int) -> int:
 
 
 def fifth_task():
+    """Запуск п'ятого завдання
+    """
     height, width = 5, 5
     matrix = create_matrix_fifth_task(height, width)
     vector = create_vector_fifth_task(matrix)
@@ -169,6 +171,15 @@ def fifth_task():
 
 
 def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
+    """Створення матриці для п'ятого завдання
+
+    Args:
+        height (int): висота матриці
+        width (int): ширина матриці
+
+    Returns:
+        list[list[float]]: матриця з чисел, обличислених по формулі  (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+    """
     matrix: list[list[float]] = [[0.0 for _ in range(width + 1)] for _ in range(height + 1)]
     for i in range(1, height + 1):
         for j in range(1, width + 1):
@@ -179,12 +190,25 @@ def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
 
 
 def create_vector_fifth_task(matrix: list[list[float]]) -> list[float]:
+    """Створення вектора
+
+    Args:
+        matrix (list[list[float]]): Матриця, на основі якої створюється вектор
+
+    Returns:
+        list[float]: масив з сум елементів в непарних рядках матриці
+    """
     vector: list[float] = [sum(matrix[i]) for i in range(1, len(matrix)) if i % 2 != 0]
 
     return vector
 
 
 def print_matrix_fifth_task(matrix: list[list[float]]):
+    """Вивід матриці
+
+    Args:
+        matrix (list[list[float]]): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
+    """
     max_len: float = max(len(str(item)) for row in matrix for item in row)
     for row in range(1, len(matrix)):
         if row == 0:
@@ -194,9 +218,13 @@ def print_matrix_fifth_task(matrix: list[list[float]]):
 
 
 def print_vector_fifth_task(vector: list[float]):
-    for elem in vector:
-        print(f"{elem:.3f}", end=" ")
-    print()
+    """Вивід вектора
+
+    Args:
+        vector (list[float]): Вектор, який потрібно вивести
+    """
+    formatted_elements: list[str] = [f"{item:.3f}" for item in vector]
+    print(*formatted_elements)
 
 
 if __name__ == "__main__":
