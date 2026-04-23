@@ -23,6 +23,8 @@ def main():
         
         print(f"Результат виконання {title.lower()}: {result}")
 
+    print("\n--- Завдання 5 ---")
+    fifth_task()
 
 def first_task(x: float, y: float, z: float) -> float:
     """Перше завдання
@@ -154,6 +156,47 @@ def fourth_task(n: int) -> int:
         int: сума елементів списку, які є непарними числами
     """
     return sum([i for i in [random.randint(0, 50) for _ in range(n)] if i % 2 != 0])
+
+
+def fifth_task():
+    height, width = 5, 5
+    matrix = create_matrix_fifth_task(height, width)
+    vector = create_vector_fifth_task(matrix)
+    print("Створена матриця:")
+    print_matrix_fifth_task(matrix)
+    print("\nСтворений вектор:")
+    print_vector_fifth_task(vector)
+
+
+def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
+    matrix: list[list[float]] = [[0.0 for _ in range(width + 1)] for _ in range(height + 1)]
+    for i in range(1, height + 1):
+        for j in range(1, width + 1):
+            element: float = (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+            matrix[i][j] = element
+
+    return matrix
+
+
+def create_vector_fifth_task(matrix: list[list[float]]) -> list[float]:
+    vector: list[float] = [sum(matrix[i]) for i in range(1, len(matrix)) if i % 2 != 0]
+
+    return vector
+
+
+def print_matrix_fifth_task(matrix: list[list[float]]):
+    max_len: float = max(len(str(item)) for row in matrix for item in row)
+    for row in range(1, len(matrix)):
+        if row == 0:
+            continue
+        formatted_row: list[str] = [f"{item:>{max_len}.3f}" for item in matrix[row]]
+        print(*formatted_row)
+
+
+def print_vector_fifth_task(vector: list[float]):
+    for elem in vector:
+        print(f"{elem:.3f}", end=" ")
+    print()
 
 
 if __name__ == "__main__":

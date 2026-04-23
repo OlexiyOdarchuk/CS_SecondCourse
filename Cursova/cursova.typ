@@ -15,7 +15,7 @@
 
 #set par(
   justify: true,
-  leading: 1.5em,
+  leading: 0.65em,
   first-line-indent: 1.25cm,
 )
 
@@ -246,7 +246,13 @@ if __name__ == "__main__":
 
 *Умова задачі:* Скласти алгоритм розв’язування задачі розгалуженого алгоритму відповідно до варіанта та зобразити його графічно у вигляді блок-схеми. Створити Python-програму. Варіанти завдань: Скласти програму для обчислення значення заданої функції y(x) за введеним з клавіатури значенням змінної x. Значення параметрів a, b або t задати самостійно.
 
-Функція: #image("second_func.png")
+Функція: $
+  y = cases(
+    sqrt(a + lg x) & text("       якщо ") x > 1,
+    arcsin x & text("       якщо ") abs(x) < 1,
+    x^a & text("       у решті випадків")
+  )
+$
 
 #pagebreak()
 
@@ -331,7 +337,7 @@ if __name__ == "__main__":
 - 2) оператора циклу з передумовою (while);
 - 3) оператора циклу з післяумовою (while True з використанням break).
 
-Функція: #image("third_func.png")
+Функція: $ f(x) = sum_(k=1)^6 ( sin(0.17 x^k) / (2k + x) ) $
 
 == Програмна реалізація алгоритму
 
@@ -558,9 +564,126 @@ if __name__ == "__main__":
 // ============================================================
 //  ЗАВДАННЯ 5
 // ============================================================
-//....
+
+= ЗАВДАННЯ № 5
+
+*Умова задачі:* 
+1. Обчислити елементи двовимірного масиву (матриці) розмірності 5 × 5, aij, де i,j = 1, 2, 3, 4, 5 за формулою, наведеною у таблиці відповідно до номера варіанта.
+2. Використовуючи елементи двовимірного масиву aij обчислити елементи
+одновимірного масиву (вектора) Xi (i = 0, 1, 2, 3, 4), за завданням, наведеним
+
+у таблиці відповідно до номера варіанта.
+
+3. В програмі використати чотири підпрограми:
+
+1) для обчислення елементів двовимірного масиву (матриці);
+2) для обчислення елементів одновимірного масиву (вектора);
+3) для виведення елементів двовимірного масиву (матриці);
+4) для виведення елементів одновимірного масиву (вектора).
+
+4. Скласти блок-схеми для цих підпрограм.
 
 #pagebreak()
+
+== Програмна реалізація алгоритму
+
+#code-style(
+```python
+def fifth_task():
+    height, width = 5, 5
+    matrix = create_matrix_fifth_task(height, width)
+    vector = create_vector_fifth_task(matrix)
+    print("Створена матриця:")
+    print_matrix_fifth_task(matrix)
+    print("\nСтворений вектор:")
+    print_vector_fifth_task(vector)
+
+def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
+    matrix: list[list[float]] = [[0.0 for _ in range(width + 1)] for _ in range(height + 1)]
+    for i in range(1, height + 1):
+        for j in range(1, width + 1):
+            element: float = (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+            matrix[i][j] = element
+
+    return matrix
+
+def create_vector_fifth_task(matrix: list[list[float]]) -> list[float]:
+    vector: list[float] = [sum(matrix[i]) for i in range(1, len(matrix)) if i % 2 != 0]
+
+    return vector
+
+def print_matrix_fifth_task(matrix: list[list[float]]):
+    max_len: float = max(len(str(item)) for row in matrix for item in row)
+    for row in range(1, len(matrix)):
+        if row == 0:
+            continue
+        formatted_row: list[str] = [f"{item:>{max_len}.3f}" for item in matrix[row]]
+        print(*formatted_row)
+
+def print_vector_fifth_task(vector: list[float]):
+    for elem in vector:
+        print(f"{elem:.3f}", end=" ")
+    print()
+
+def main():
+    print("--- Курсова робота ---")
+    print("--- Варіант 21 ---")
+
+    tasks = [
+        # ("Завдання 1", first_task, float, 3),
+        # ("Завдання 2", second_task, float, 1),
+        # ("Завдання 3", third_task, float, 1),
+        # ("Завдання 4", fourth_task, int, 1)
+    ]
+
+    for title, func, data_type, args_count in tasks:
+        print(f"\n--- {title} ---")
+        
+        data: list[list] = help.input_variables(data_type, amount=args_count)
+
+        result = func(*data[0])
+        
+        print(f"Результат виконання {title.lower()}: {result}")
+    
+    print("\n--- Завдання 5 ---")
+    fifth_task()
+
+if __name__ == "__main__":
+    main()
+
+```
+)
+
+== Результат виконання коду
+
+#result[
+  --- Курсова робота ---
+  
+  --- Варіант 21 ---
+  
+  --- Завдання 5 ---
+  Створена матриця:
+  0.000              3.828              3.481              3.412              3.423              3.462
+  0.000              7.000              5.330              4.623              4.332              4.228
+  0.000             11.937              8.681              7.000              6.121              5.658
+  0.000             19.287             13.621             10.544              8.826              7.838
+  0.000             30.967             20.980             15.576             12.555             10.798
+
+  Створений вектор:
+  17.607 39.398 90.876 
+]
+
+== Блок-схема алгоритму
+
+#flowchart("fourth_task.svg", caption: "Четверте завдання", width: 80%)
+
+
+#pagebreak()
+
+
+// ============================================================
+//  ДОДАТОК А
+// ============================================================
 #heading(numbering: none)[ДОДАТОК А]
 #align(center)[#text(weight: "bold")[Програмний код допоміжного модуля (help.py)]]
 
