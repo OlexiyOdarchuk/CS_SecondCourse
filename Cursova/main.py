@@ -169,52 +169,60 @@ def fifth_task():
     print("\nСтворений вектор:")
     print_vector_fifth_task(vector)
 
-
-def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
-    """Створення матриці для п'ятого завдання
+def create_matrix_fifth_task(
+    height: int = 5, width: int = 5
+) -> help.Matrix1Based[float]:
+    """
+    Створення матриці для п'ятого завдання.
 
     Args:
-        height (int): висота матриці
-        width (int): ширина матриці
+        height: висота матриці (кількість рядків).
+        width: ширина матриці (кількість стовпців).
 
     Returns:
-        list[list[float]]: матриця з чисел, обличислених по формулі  (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+        help.Matrix1Based[float]: об'єкт матриці з обчисленими значеннями.
     """
-    matrix: list[list[float]] = [[0.0 for _ in range(width + 1)] for _ in range(height + 1)]
+    matrix = help.Matrix1Based[float](height, width)
+
     for i in range(1, height + 1):
         for j in range(1, width + 1):
-            element: float = (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
-            matrix[i][j] = element
+            value: float = ((3 + i) / (i + j)) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+            matrix[i][j] = value
 
     return matrix
 
 
-def create_vector_fifth_task(matrix: list[list[float]]) -> list[float]:
-    """Створення вектора
+def create_vector_fifth_task(matrix: help.Matrix1Based[float]) -> list[float]:
+    """
+    Створення вектора на основі сум непарних рядків матриці.
 
     Args:
-        matrix (list[list[float]]): Матриця, на основі якої створюється вектор
+        matrix: Об'єкт Matrix1Based, з якого беруться дані.
 
     Returns:
-        list[float]: масив з сум елементів в непарних рядках матриці
+        list[float]: список сум (для рядків 1, 3, 5).
     """
-    vector: list[float] = [sum(matrix[i]) for i in range(1, len(matrix)) if i % 2 != 0]
+    vector: list[float] = []
+
+    for i in range(1, matrix.rows + 1, 2):
+        row_sum = 0.0
+        for j in range(1, matrix.cols + 1):
+            val = matrix[i][j]
+            if val is not None:
+                row_sum += val
+        vector.append(row_sum)
 
     return vector
 
 
-def print_matrix_fifth_task(matrix: list[list[float]]):
+def print_matrix_fifth_task(matrix: help.Matrix1Based):
     """Вивід матриці
 
     Args:
-        matrix (list[list[float]]): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
+        matrix (help.Matrix1Based): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
     """
-    max_len: float = max(len(str(item)) for row in matrix for item in row)
-    for row in range(1, len(matrix)):
-        if row == 0:
-            continue
-        formatted_row: list[str] = [f"{item:>{max_len}.3f}" for item in matrix[row]]
-        print(*formatted_row)
+    print()
+    print(matrix)
 
 
 def print_vector_fifth_task(vector: list[float]):

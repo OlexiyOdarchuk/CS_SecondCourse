@@ -1111,21 +1111,19 @@ if __name__ == "__main__":
 #v(1em)
 #code-style(
 ```
-from typing import Any, Callable, Optional, TypeVar, Union
-
-T = TypeVar("T")
+from collections.abc import Callable
 
 
-def input_variables(
+def input_variables[T](
     convert_func: Callable[[str], T],
     message: str = "DEFAULT",
     digit_count: int = 0,
-    min_val: Optional[Union[int, float]] = None,
-    max_val: Optional[Union[int, float]] = None,
+    min_val: int | float | None = None,
+    max_val: int | float | None = None,
     amount: int = 1,
     rows: int = 1,
     cols: int = 0,
-    validator: Optional[Callable[[T], bool]] = None,
+    validator: Callable[[T], bool] | None = None,
 ) -> list[list[T]]:
     """
     Універсальний інструмент для зчитування та валідації даних з консолі.
@@ -1157,7 +1155,7 @@ def input_variables(
     """
 
     if amount < 1:
-        raise ValueError("Кількість елементів має бути >= 1")
+        raise ValueError("the number of elements (amount) must be >= 1")
 
     actual_cols = cols if cols > 0 else amount
 
@@ -1165,7 +1163,7 @@ def input_variables(
         parts = line.split()
         if len(parts) < expected_count:
             raise ValueError(
-                f"Замало даних! Очікувано {expected_count}, отримано {len(parts)}"
+                f"not enough data; expected {expected_count}, received {len(parts)}"
             )
 
         parts = parts[:expected_count]
@@ -1173,28 +1171,30 @@ def input_variables(
         try:
             parsed = [convert_func(p) for p in parts]
         except Exception as e:
-            raise ValueError(f"Помилка типу даних: {e}")
+            raise ValueError(e)
 
         for i, val in enumerate(parsed):
             if digit_count > 0:
                 clean_str = str(parts[i]).lstrip("-").replace(".", "")
                 if len(clean_str) != digit_count:
-                    raise ValueError(f"Число '{parts[i]}' має мати {digit_count} цифр")
+                    raise ValueError(
+                        f"the number '{parts[i]}' must consist of {digit_count} digits"
+                    )
 
             if isinstance(val, (int, float)):
                 if min_val is not None and val < min_val:
-                    raise ValueError(f"Значення {val} менше за мінімальне ({min_val})")
+                    raise ValueError(f"the value of {val} is less than the minimum ({min_val})")
                 if max_val is not None and val > max_val:
                     raise ValueError(
-                        f"Значення {val} більше за максимальне ({max_val})"
+                        f"the value of {val} is greater than the maximum ({max_val})"
                     )
 
             if validator and not validator(val):
-                raise ValueError(f"Значення {val} не пройшло кастомну валідацію")
+                raise ValueError(f"the value {val} did not pass validation")
 
         return parsed
 
-    result: list[list[Any]] = []
+    result: list[list[T]] = []
     needed_rows = rows
 
     for r in range(needed_rows):
@@ -1216,6 +1216,55 @@ def input_variables(
                 print(f"⚠️ {e}. Спробуйте ще раз.")
 
     return result
+
+
+class _RowProxy[T]:
+    """Допоміжний клас для обробки другого індексу matrix[i][j]"""
+
+    def __init__(self, row_ref: list[T | None], cols_count: int) -> None:
+        self.row: list[T | None] = row_ref
+        self.cols: int = cols_count
+
+    def __getitem__(self, j: int) -> T | None:
+        if not (1 <= j <= self.cols):
+            raise IndexError(f"column index {j} out of range [1..{self.cols}]")
+        return self.row[j - 1]
+
+    def __setitem__(self, j: int, value: T) -> None:
+        if not (1 <= j <= self.cols):
+            raise IndexError(f"column index {j} out of range [1..{self.cols}]")
+        self.row[j - 1] = value
+
+
+class Matrix1Based[T]:
+    """
+    Матриця з індексацією від 1 для завдання 5.
+    """
+
+    def __init__(self, rows: int, cols: int, default_value: T | None = None) -> None:
+        self.rows: int = rows
+        self.cols: int = cols
+        self._data: list[list[T | None]] = [
+            [default_value for _ in range(cols)] for _ in range(rows)
+        ]
+
+    def __getitem__(self, i: int) -> _RowProxy[T]:
+        if not (1 <= i <= self.rows):
+            raise IndexError(f"row index {i} out of range [1..{self.rows}]")
+
+        return _RowProxy(self._data[i - 1], self.cols)
+
+    def __repr__(self) -> str:
+        res: list[str] = []
+        for row in self._data:
+            res.append(
+                " | ".join([str(item) if item is not None else "---" for item in row])
+            )
+        return "\n".join(res)
+
+    def get(self) -> list[list[T | None]]:
+        """Повертає raw-дані для обробки."""
+        return self._data
 ```
 )
 == Блок-схеми підпрограм
