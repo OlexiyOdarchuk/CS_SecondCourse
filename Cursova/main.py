@@ -108,7 +108,7 @@ def for_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     for k in range(1, 7):
-        sum += math.sin(0.17 * (x**k)) / (k**2) + x ** (k * 2)
+        sum += math.sin(0.17 * (x**k)) / (2*k) + x
     return sum
 
 def while_cycle_third_task(x: float) -> float:
@@ -123,7 +123,7 @@ def while_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     while k < 7:
-        sum += math.sin(0.17 * (x**k)) / (k**2) + x ** (k * 2)
+        sum += math.sin(0.17 * (x**k)) / (2 * k) + x
         k += 1
     return sum
 
@@ -139,7 +139,7 @@ def while_true_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     while True:
-        sum += math.sin(0.17 * (x**k)) / (k**2) + x ** (k * 2)
+        sum += math.sin(0.17 * (x**k)) / (2 * k) + x
         k += 1
         if k >= 7:
             break

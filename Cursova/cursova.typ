@@ -171,7 +171,7 @@
 = ЗАВДАННЯ № 1
 
 *Умова задачі:* Скласти блок-схему та програму лінійного алгоритму на мові програмування Python та реалізувати її.
-Знайти значення функції $ f = (y - z) dot frac((y - z)^(y - z), 1 + x^2) + ln x $ Значення змінних х, y, z ввести з клавіатури.
+Знайти значення функції $ f = (y - z) dot frac(y - z^(y - z), 1 + x^2) + ln x $ Значення змінних х, y, z ввести з клавіатури.
 
 == Програмна реалізація алгоритму
 
@@ -468,7 +468,7 @@ def for_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     for k in range(1, 7):
-        sum += math.sin(0.17 * (x**k)) / (k**2) + x ** (k * 2)
+        sum += math.sin(0.17 * (x**k)) / (2*k) + x
     return sum
 
 def while_cycle_third_task(x: float) -> float:
@@ -483,7 +483,7 @@ def while_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     while k < 7:
-        sum += math.sin(0.17 * (x**k)) / (k**2) + x ** (k * 2)
+        sum += math.sin(0.17 * (x**k)) / (2*k) + x
         k += 1
     return sum
 
@@ -499,7 +499,7 @@ def while_true_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     while True:
-        sum += math.sin(0.17 * (x**k)) / (k**2) + x ** (k * 2)
+        sum += math.sin(0.17 * (x**k)) / (2*k) + x
         k += 1
         if k >= 7:
             break
@@ -605,7 +605,7 @@ if __name__ == "__main__":
     node((0, 3), [$k = 1, 6, 1$], shape: shapes.hexagon, name: <t3f-for>),
     edge(<t3f-for>, (0, 4), "-|>"),
 
-    node((0, 4), [$S = S + sin(0.17 dot x^k) / k^2 + x^(2k)$], shape: rect, name: <t3f-body>),
+    node((0, 4), [$S = S + sin(0.17 dot x^k) / (2*k + x)$], shape: rect, name: <t3f-body>),
     edge(<t3f-body>, (1.5, 4), (1.5, 3), <t3f-for>, "-|>"),
 
     edge(<t3f-for>, (-1.5, 3), (-1.5, 5), "-|>"),
@@ -635,7 +635,7 @@ if __name__ == "__main__":
     node((0, 3), [$k < 7$], shape: shapes.diamond, name: <t3w-if>),
 
     edge(<t3w-if>, (0, 4), "-|>", label: [Так], label-pos: 0.5),
-    node((0, 4), [$S = S + sin(0.17 dot x^k) / k^2 + x^(2k)$], shape: rect, name: <t3w-body>),
+    node((0, 4), [$S = S + sin(0.17 dot x^k) / (2*k + x)$], shape: rect, name: <t3w-body>),
     edge(<t3w-body>, (0, 5), "-|>"),
 
     node((0, 5), [$k = k + 1$], shape: rect, name: <t3w-inc>),
@@ -653,15 +653,15 @@ if __name__ == "__main__":
 #flowchart(
   diagram(
     node-stroke: dstu-stroke,
-    spacing: (20mm, 10mm),
+    spacing: (22mm, 12mm),
     mark-scale: 80%,
-
+    
     node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t3wt-start>),
     edge(<t3wt-start>, (0, 1), "-|>"),
-
+    
     node((0, 1), [Введення $x$], shape: shapes.parallelogram, name: <t3wt-in>),
     edge(<t3wt-in>, (0, 2), "-|>"),
-
+    
     node((0, 2), [$S = 0$, $k = 1$], shape: rect, name: <t3wt-init>),
     edge(<t3wt-init>, (0, 3), "-|>"),
 
@@ -765,10 +765,10 @@ if __name__ == "__main__":
     node-stroke: dstu-stroke,
     spacing: (20mm, 10mm),
     mark-scale: 80%,
-
+    
     node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t4-start>),
     edge(<t4-start>, (0, 1), "-|>"),
-
+    
     node((0, 1), [Введення $n$], shape: shapes.parallelogram, name: <t4-in>),
     edge(<t4-in>, (0, 2), "-|>"),
 
@@ -838,52 +838,60 @@ def fifth_task():
     print("\nСтворений вектор:")
     print_vector_fifth_task(vector)
 
-
-def create_matrix_fifth_task(height: int, width:int) -> list[list[float]]:
-    """Створення матриці для п'ятого завдання
+def create_matrix_fifth_task(
+    height: int = 5, width: int = 5
+) -> help.Matrix1Based[float]:
+    """
+    Створення матриці для п'ятого завдання.
 
     Args:
-        height (int): висота матриці
-        width (int): ширина матриці
+        height: висота матриці (кількість рядків).
+        width: ширина матриці (кількість стовпців).
 
     Returns:
-        list[list[float]]: матриця з чисел, обличислених по формулі  (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+        help.Matrix1Based[float]: об'єкт матриці з обчисленими значеннями.
     """
-    matrix: list[list[float]] = [[0.0 for _ in range(width + 1)] for _ in range(height + 1)]
+    matrix = help.Matrix1Based[float](height, width)
+
     for i in range(1, height + 1):
         for j in range(1, width + 1):
-            element: float = (3 + i) / (i + j) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
-            matrix[i][j] = element
+            value: float = ((3 + i) / (i + j)) * math.sqrt(i**3 + j**2) + 2 ** (i - j)
+            matrix[i][j] = value
 
     return matrix
 
 
-def create_vector_fifth_task(matrix: list[list[float]]) -> list[float]:
-    """Створення вектора
+def create_vector_fifth_task(matrix: help.Matrix1Based[float]) -> list[float]:
+    """
+    Створення вектора на основі сум непарних рядків матриці.
 
     Args:
-        matrix (list[list[float]]): Матриця, на основі якої створюється вектор
+        matrix: Об'єкт Matrix1Based, з якого беруться дані.
 
     Returns:
-        list[float]: масив з сум елементів в непарних рядках матриці
+        list[float]: список сум (для рядків 1, 3, 5).
     """
-    vector: list[float] = [sum(matrix[i]) for i in range(1, len(matrix)) if i % 2 != 0]
+    vector: list[float] = []
+
+    for i in range(1, matrix.rows + 1, 2):
+        row_sum = 0.0
+        for j in range(1, matrix.cols + 1):
+            val = matrix[i][j]
+            if val is not None:
+                row_sum += val
+        vector.append(row_sum)
 
     return vector
 
 
-def print_matrix_fifth_task(matrix: list[list[float]]):
+def print_matrix_fifth_task(matrix: help.Matrix1Based):
     """Вивід матриці
 
     Args:
-        matrix (list[list[float]]): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
+        matrix (help.Matrix1Based): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
     """
-    max_len: float = max(len(str(item)) for row in matrix for item in row)
-    for row in range(1, len(matrix)):
-        if row == 0:
-            continue
-        formatted_row: list[str] = [f"{item:>{max_len}.3f}" for item in matrix[row]]
-        print(*formatted_row)
+    print()
+    print(matrix)
 
 
 def print_vector_fifth_task(vector: list[float]):
@@ -935,11 +943,14 @@ if __name__ == "__main__":
 
 --- Завдання 5 ---
 Створена матриця:
-0.000              3.828              3.481              3.412              3.423              3.462
-0.000              7.000              5.330              4.623              4.332              4.228
-0.000             11.937              8.681              7.000              6.121              5.658
-0.000             19.287             13.621             10.544              8.826              7.838
-0.000             30.967             20.980             15.576             12.555             10.798
+
+                Стовп. 1    Стовп. 2    Стовп. 3    Стовп. 4    Стовп. 5
+           ┌────────────────────────────────────────────────────────────
+  Рядок 1  │       3.828       3.481       3.412       3.423       3.462
+  Рядок 2  │       7.000       5.330       4.623       4.332       4.228
+  Рядок 3  │      11.937       8.681       7.000       6.121       5.658
+  Рядок 4  │      19.287      13.621      10.544       8.826       7.838
+  Рядок 5  │      30.967      20.980      15.576      12.555      10.798
 
 Створений вектор:
 17.607 39.398 90.876
@@ -954,25 +965,25 @@ if __name__ == "__main__":
     node-stroke: dstu-stroke,
     spacing: (22mm, 10mm),
     mark-scale: 80%,
-
+    
     node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5m-start>),
     edge(<t5m-start>, (0, 1), "-|>"),
-
+    
     node((0, 1), [$h = 5$, $w = 5$], shape: rect, name: <t5m-hw>),
     edge(<t5m-hw>, (0, 2), "-|>"),
-
+    
     node((0, 2), [$M = "create_matrix_fifth_task"(h, w)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-cm>),
     edge(<t5m-cm>, (0, 3), "-|>"),
-
+    
     node((0, 3), [$V = "create_vector_fifth_task"(M)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-cv>),
     edge(<t5m-cv>, (0, 4), "-|>"),
-
+    
     node((0, 4), [$"print_matrix_fifth_task"(M)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-pm>),
     edge(<t5m-pm>, (0, 5), "-|>"),
-
+    
     node((0, 5), [$"print_vector_fifth_task"(V)$], shape: rect, extrude: (2pt, 0pt), name: <t5m-pv>),
     edge(<t5m-pv>, (0, 6), "-|>"),
-
+    
     node((0, 6), [Кінець], shape: rect, corner-radius: 10pt, name: <t5m-end>),
   ),
 )
@@ -983,31 +994,31 @@ if __name__ == "__main__":
     node-stroke: dstu-stroke,
     spacing: (20mm, 10mm),
     mark-scale: 80%,
-
+    
     node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5cm-start>),
     edge(<t5cm-start>, (0, 1), "-|>"),
-
-    node((0, 1), [Введення $h, w$], shape: shapes.parallelogram, name: <t5cm-in>),
+    
+    node((0, 1), [Отримання $h, w$], shape: shapes.parallelogram, name: <t5cm-in>),
     edge(<t5cm-in>, (0, 2), "-|>"),
-
-    node((0, 2), [$M = 0_((h+1) times (w+1))$], shape: rect, name: <t5cm-init>),
+    
+    node((0, 2), [$M = "Matrix1Based"(h, w)$], shape: rect, name: <t5cm-init>),
     edge(<t5cm-init>, (0, 3), "-|>"),
-
+    
     node((0, 3), [$i = 1, h, 1$], shape: shapes.hexagon, name: <t5cm-fi>),
     edge(<t5cm-fi>, (0, 4), "-|>"),
-
+    
     node((0, 4), [$j = 1, w, 1$], shape: shapes.hexagon, name: <t5cm-fj>),
     edge(<t5cm-fj>, (0, 5), "-|>"),
-
+    
     node((0, 5), [$M_(i,j) = (3+i)/(i+j) dot sqrt(i^3 + j^2) + 2^(i-j)$], shape: rect, name: <t5cm-body>),
     edge(<t5cm-body>, (2, 5), (2, 4), <t5cm-fj>, "-|>"),
-
+    
     edge(<t5cm-fj>, (-1.7, 4), (-1.7, 3), <t5cm-fi>, "-|>"),
-
+    
     edge(<t5cm-fi>, (2.2, 3), (2.2, 6), "-|>"),
     node((2.2, 6), [Повернути $M$], shape: shapes.parallelogram, name: <t5cm-ret>),
     edge(<t5cm-ret>, (2.2, 7), "-|>"),
-
+    
     node((2.2, 7), [Кінець], shape: rect, corner-radius: 10pt, name: <t5cm-end>),
   ),
 )
@@ -1016,34 +1027,45 @@ if __name__ == "__main__":
 #flowchart(
   diagram(
     node-stroke: dstu-stroke,
-    spacing: (20mm, 10mm),
+    spacing: (8mm, 10mm),
     mark-scale: 80%,
-
+    
     node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5cv-start>),
     edge(<t5cv-start>, (0, 1), "-|>"),
-
+    
     node((0, 1), [Введення $M$], shape: shapes.parallelogram, name: <t5cv-in>),
     edge(<t5cv-in>, (0, 2), "-|>"),
-
+    
     node((0, 2), [$V = [ ]$], shape: rect, name: <t5cv-init>),
     edge(<t5cv-init>, (0, 3), "-|>"),
 
-    node((0, 3), [$i = 1, "len"(M)-1, 1$], shape: shapes.hexagon, name: <t5cv-for>),
-    edge(<t5cv-for>, (0, 4), "-|>"),
+    node((0, 3), [$i = 1, M."rows", 2$], shape: shapes.hexagon, name: <t5cv-for-i>),
+    edge(<t5cv-for-i>, (0, 4), "-|>"),
+    
+    node((0, 4), [$"row_sum" = 0.0$], shape: rect, name: <t5cv-rs>),
+    edge(<t5cv-rs>, (0, 5), "-|>"),
+    
+    node((0, 5), [$j = 1, M."cols", 1$], shape: shapes.hexagon, name: <t5cv-for-j>),
+    edge(<t5cv-for-j>, (0, 6), "-|>"),
+    
+    node((0, 6), [$M_(i,j) != "None"$], shape: shapes.diamond, name: <t5cv-if>),
 
-    node((0, 4), [$i mod 2 != 0$], shape: shapes.diamond, name: <t5cv-if>),
-    edge(<t5cv-if>, (0, 5), "-|>", label: [Так], label-pos: 0.5),
+    edge(<t5cv-if>, (1.5, 6), "-|>", label: [Так], label-pos: 0.2),
+    node((1.5, 6), [$"row_sum" += M_(i,j)$], shape: rect, name: <t5cv-add>),
+    edge(<t5cv-add>, (1.5, 5), <t5cv-for-j>, "-|>"),
 
-    node((0, 5), [$V$.append$("sum"(M_i))$], shape: rect, name: <t5cv-app>),
-    edge(<t5cv-app>, (1.7, 5), (1.7, 3), <t5cv-for>, "-|>"),
+    edge(<t5cv-if>, (-1.5, 6), (-1.5, 5), <t5cv-for-j>, "-|>", label: [Ні], label-pos: 0.2),
 
-    edge(<t5cv-if>, (1.7, 4), (1.7, 3), <t5cv-for>, "-|>", label: [Ні], label-pos: 0.15),
+    edge(<t5cv-for-j>, (2.5, 5), (2.5, 7), (0, 7), "-|>"),
+    node((0, 7), [$V."append"("row_sum")$], shape: rect, name: <t5cv-app>),
 
-    edge(<t5cv-for>, (-1.7, 3), (-1.7, 5), "-|>"),
-    node((-1.7, 5), [Повернути $V$], shape: shapes.parallelogram, name: <t5cv-ret>),
-    edge(<t5cv-ret>, (-1.7, 6), "-|>"),
+    edge(<t5cv-app>, (-2.5, 7), (-2.5, 3), <t5cv-for-i>, "-|>"),
 
-    node((-1.7, 6), [Кінець], shape: rect, corner-radius: 10pt, name: <t5cv-end>),
+    edge(<t5cv-for-i>, (3.8, 3), (3.8, 8), "-|>"),
+    node((3.8, 8), [Повернути $V$], shape: shapes.parallelogram, name: <t5cv-ret>),
+    edge(<t5cv-ret>, (3.8, 9), "-|>"),
+    
+    node((3.8, 9), [Кінець], shape: rect, corner-radius: 10pt, name: <t5cv-end>),
   ),
 )
 
@@ -1053,24 +1075,20 @@ if __name__ == "__main__":
     node-stroke: dstu-stroke,
     spacing: (20mm, 10mm),
     mark-scale: 80%,
-
+    
     node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5pm-start>),
     edge(<t5pm-start>, (0, 1), "-|>"),
-
+    
     node((0, 1), [Введення $M$], shape: shapes.parallelogram, name: <t5pm-in>),
     edge(<t5pm-in>, (0, 2), "-|>"),
-
-    node((0, 2), [$"max_len" = max(|x|: x in M)$], shape: rect, name: <t5pm-init>),
-    edge(<t5pm-init>, (0, 3), "-|>"),
-
-    node((0, 3), [$"row" = 1, "len"(M)-1, 1$], shape: shapes.hexagon, name: <t5pm-for>),
-    edge(<t5pm-for>, (0, 4), "-|>"),
-
-    node((0, 4), [Виведення \ рядка $M_"row"$], shape: shapes.parallelogram, name: <t5pm-out>),
-    edge(<t5pm-out>, (1.7, 4), (1.7, 3), <t5pm-for>, "-|>"),
-
-    edge(<t5pm-for>, (-1.7, 3), (-1.7, 4), "-|>"),
-    node((-1.7, 4), [Кінець], shape: rect, corner-radius: 10pt, name: <t5pm-end>),
+    
+    node((0, 2), [Виведення\ порожнього рядка], shape: shapes.parallelogram, name: <t5pm-nl>),
+    edge(<t5pm-nl>, (0, 3), "-|>"),
+    
+    node((0, 3), [Виведення $M$], shape: shapes.parallelogram, name: <t5pm-out>),
+    edge(<t5pm-out>, (0, 4), "-|>"),
+    
+    node((0, 4), [Кінець], shape: rect, corner-radius: 10pt, name: <t5pm-end>),
   ),
 )
 
@@ -1080,24 +1098,22 @@ if __name__ == "__main__":
     node-stroke: dstu-stroke,
     spacing: (20mm, 10mm),
     mark-scale: 80%,
-
+    
     node((0, 0), [Початок], shape: rect, corner-radius: 10pt, name: <t5pv-start>),
     edge(<t5pv-start>, (0, 1), "-|>"),
-
+    
     node((0, 1), [Введення $V$], shape: shapes.parallelogram, name: <t5pv-in>),
     edge(<t5pv-in>, (0, 2), "-|>"),
-
-    node((0, 2), [для кожного $e in V$], shape: shapes.hexagon, name: <t5pv-for>),
-    edge(<t5pv-for>, (0, 3), "-|>"),
-
-    node((0, 3), [Виведення $e$], shape: shapes.parallelogram, name: <t5pv-out>),
-    edge(<t5pv-out>, (1.7, 3), (1.7, 2), <t5pv-for>, "-|>"),
-
-    edge(<t5pv-for>, (-1.7, 2), (-1.7, 3), "-|>"),
-    node((-1.7, 3), [Кінець], shape: rect, corner-radius: 10pt, name: <t5pv-end>),
+    
+    node((0, 2), [Форматування ел-тів $V$\ (3 знаки після коми)], shape: rect, name: <t5pv-fmt>),
+    edge(<t5pv-fmt>, (0, 3), "-|>"),
+    
+    node((0, 3), [Виведення вектора], shape: shapes.parallelogram, name: <t5pv-out>),
+    edge(<t5pv-out>, (0, 4), "-|>"),
+    
+    node((0, 4), [Кінець], shape: rect, corner-radius: 10pt, name: <t5pv-end>),
   ),
 )
-
 
 #pagebreak()
 
@@ -1105,7 +1121,7 @@ if __name__ == "__main__":
 // ============================================================
 //  ДОДАТОК А
 // ============================================================
-#heading(numbering: none)[ДОДАТОК А]
+#heading[ДОДАТОК А]
 #align(center)[#text(weight: "bold")[Програмний код допоміжного модуля (help.py)]]
 
 #v(1em)
