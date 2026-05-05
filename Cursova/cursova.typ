@@ -109,42 +109,45 @@
 #page(numbering: none)[
   #set par(first-line-indent: 0pt, justify: false)
   #align(center)[
-    #text(size: 13pt)[
-      Міністерство освіти і науки України \
-      Відокремлений структурний підрозділ "Фаховий коледж інформаційних технологій Національного університету "Львівська політехніка" \
-      НАЗВА ЦИКЛОВОЇ КОМІСІЇ
+    #text(size: 14pt, weight: "bold")[
+      НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ «ЛЬВІВСЬКА ПОЛІТЕХНІКА»
+      ВІДОКРЕМЛЕНИЙ СТРУКТУРНИЙ ПІДРОЗДІЛ\
+      «ФАХОВИЙ КОЛЕДЖ ІНФОРМАЦІЙНИХ ТЕХНОЛОГІЙ
+      НАЦІОНАЛЬНОГО УНІВЕРСИТЕТУ «ЛЬВІВСЬКА ПОЛІТЕХНІКА»
     ]
-
+    
     #v(3cm)
-
+    
     #text(size: 16pt, weight: "bold")[КУРСОВА РОБОТА]
-
+    
     #v(0.5cm)
-
-    #text(size: 14pt)[з дисципліни "Інформатика"]
-
-    #v(1cm)
-
-    #text(size: 15pt, weight: "bold")[
-      Тема: «Назва теми курсової роботи»
+    
+    #text(size: 13pt)[На тему: ]
+    #text(size: 16pt, weight: "bold")[
+      «Розробка та програмна реалізація алгоритмів
+      розв’язування математичних задач мовою Python»
     ]
-
+    
     #v(3cm)
-
-    #align(right)[
-      #table(
-        columns: (auto, auto),
-        stroke: none,
-        inset: (x: 4pt, y: 4pt),
-        [Виконав(ла):], [студент групи МТ-22],
-        [], [Одарчук О.Р],
-        [Перевірив(ла):], [посада],
-        [], [Йосифів Л.Б.],
-      )
-    ]
-
+    
+    #grid(
+      columns: (1fr, 1fr),
+      [],
+      align(left)[
+        Виконав студент групи МТ-22 \
+        #text(weight: "bold")[Одарчук О.Р.] \
+        Варіант 21 \
+        Керівник: \
+        Курсова робота перевірена і
+        допущена до захисту
+        «#underline[#h(20pt)]» #underline[#h(100pt)] 2026 р.
+        Курсова робота при захисті
+        оцінена:
+      ],
+    )
+    
     #v(1fr)
-
+    
     #text(size: 13pt)[Львів — 2026]
   ]
 ]
@@ -294,8 +297,6 @@ if __name__ == "__main__":
     x^a & text("       у решті випадків")
   )
 $
-
-#pagebreak()
 
 == Програмна реалізація алгоритму
 
@@ -468,7 +469,7 @@ def for_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     for k in range(1, 7):
-        sum += math.sin(0.17 * (x**k)) / (2*k) + x
+        sum += math.sin(0.17 * (x**k)) / ((2*k) + x)
     return sum
 
 def while_cycle_third_task(x: float) -> float:
@@ -483,7 +484,7 @@ def while_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     while k < 7:
-        sum += math.sin(0.17 * (x**k)) / (2*k) + x
+        sum += math.sin(0.17 * (x**k)) / ((2*k) + x)
         k += 1
     return sum
 
@@ -499,7 +500,7 @@ def while_true_cycle_third_task(x: float) -> float:
     sum: float = 0.0
     k: int = 1
     while True:
-        sum += math.sin(0.17 * (x**k)) / (2*k) + x
+        sum += math.sin(0.17 * (x**k)) / ((2*k) + x)
         k += 1
         if k >= 7:
             break
@@ -665,7 +666,7 @@ if __name__ == "__main__":
     node((0, 2), [$S = 0$, $k = 1$], shape: rect, name: <t3wt-init>),
     edge(<t3wt-init>, (0, 3), "-|>"),
 
-    node((0, 3), [$S = S + sin(0.17 dot x^k) / k^2 + x^(2k)$], shape: rect, name: <t3wt-body>),
+    node((0, 3), [$S = S + sin(0.17 dot x^k) / (2*k + x)$], shape: rect, name: <t3wt-body>),
     edge(<t3wt-body>, (0, 4), "-|>"),
 
     node((0, 4), [$k = k + 1$], shape: rect, name: <t3wt-inc>),
@@ -800,6 +801,7 @@ if __name__ == "__main__":
   ),
 )
 
+#pagebreak()
 
 // ============================================================
 //  ЗАВДАННЯ 5
@@ -884,11 +886,11 @@ def create_vector_fifth_task(matrix: help.Matrix1Based[float]) -> list[float]:
     return vector
 
 
-def print_matrix_fifth_task(matrix: help.Matrix1Based):
+def print_matrix_fifth_task(matrix: help.Matrix1Based[float]):
     """Вивід матриці
 
     Args:
-        matrix (help.Matrix1Based): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
+        matrix (help.Matrix1Based[float]): Матриця, яку потрібно буде вивести (виводить з елемента з індексом 0, а не 1)
     """
     print()
     print(matrix)
@@ -931,8 +933,6 @@ if __name__ == "__main__":
 
 ```
 )
-
-#pagebreak()
 
 == Результат виконання коду
 
