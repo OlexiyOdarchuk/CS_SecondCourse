@@ -1,0 +1,11 @@
+typst-docs:
+  type: Web
+  title: Typst Documentation
+  author: Typst GmbH
+  url: https://typst.app/docs/
+
+fletcher-docs:
+  type: Web
+  title: Fletcher Package Documentation (Typst Universe)
+  author: Jollywatt
+  url: https://typst.app/universe/package/fletcher
